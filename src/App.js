@@ -99,8 +99,13 @@ function App() {
 
   const updateState = async () => {
     if (correctNet) {
-      await getURIs();
-    }
+      if (walletAddress) {
+        await getURIs();
+      } else {
+        setConnectStatus(false)
+        setItems([])
+      }
+    } 
   };
 
   const mint = async () => {
@@ -131,7 +136,7 @@ function App() {
 
   return (
     <div className="App">
-      <div className={correctNet ? "authed-container" : "container"}>
+      <div className={correctNet && connectStatus ? "authed-container" : "container"}>
         <p className="sub-text">View your NFT collection in the metaverse ✨</p>
         <div className="header-container">
           <div className="connected-container">
@@ -144,7 +149,7 @@ function App() {
               </button>
             )}
 
-            {correctNet && (
+            {correctNet && connectStatus && (
               <button className="cta-button submit-nft-button" onClick={mint}>
                 Mint
               </button>
@@ -160,7 +165,7 @@ function App() {
             )}
           </div>
         </div>
-        {correctNet && (
+        {correctNet && connectStatus && (
           <div className="nft-grid">
             {items.map((item, index) => (
               <div className="nft-item" key={index}>
@@ -173,7 +178,7 @@ function App() {
       </div>
       <ToastContainer
         position="top-right"
-        autoClose={5000}
+        autoClose={3000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
